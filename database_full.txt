@@ -1,0 +1,244 @@
+XML FILE 
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/bt3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="164dp"
+        android:layout_marginBottom="153dp"
+        android:text="View"
+        android:onClick="onView"/>
+
+    <Button
+        android:id="@+id/bt4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="227dp"
+        android:text="Delete"
+        android:onClick="onDelete"
+        />
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="96dp"
+        android:layout_marginBottom="659dp"
+        android:text="Student details"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/ed1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="104dp"
+        android:layout_marginBottom="543dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:text="rollno" />
+
+    <EditText
+        android:id="@+id/ed2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="103dp"
+        android:layout_marginBottom="491dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:text="Name" />
+
+    <EditText
+        android:id="@+id/ed3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="101dp"
+        android:layout_marginBottom="442dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:text="Department" />
+
+    <Button
+        android:id="@+id/bt1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="356dp"
+        android:text="Insert"
+        android:onClick="onInsert"/>
+
+    <Button
+        android:id="@+id/bt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="296dp"
+        android:text="Update"
+        android:onClick="onUpdate"/>
+
+</RelativeLayout>
+
+
+JAVA FILE
+
+
+package com.example.sql;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+    TextView tv1;
+    EditText et1,et2,et3;
+    Button bt1,bt2,bt3,bt4;
+    String rno,name,dept;
+    SQLiteDatabase db;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        tv1=findViewById(R.id.tv1);
+        et1=findViewById(R.id.ed1);
+        et2=findViewById(R.id.ed2);
+        et3=findViewById(R.id.ed3);
+        bt1=findViewById(R.id.bt1);
+        bt2=findViewById(R.id.bt2);
+        bt3=findViewById(R.id.bt3);
+        bt4=findViewById(R.id.bt4);
+        DBHelper dbHelper= new DBHelper(this);
+        db=dbHelper.getWritableDatabase();
+        db=dbHelper.getReadableDatabase();
+    }
+    public void onInsert (View view)
+    {
+        rno=et1.getText().toString();
+        name=et2.getText().toString();
+        dept=et3.getText().toString();
+        if(rno.equals("")||name.equals("")||dept.equals("")){
+            Toast.makeText(this,"Please enter values",Toast.LENGTH_LONG).show();
+        }else{
+            ContentValues values=new ContentValues();
+            values.put("rollno",rno);
+            values.put("name",name);
+            values.put("dept",dept);
+            db.insert("student",null,values);
+            Toast.makeText(this,"Inserted successfully",Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public void onUpdate(View view) {
+
+        rno=et1.getText().toString();
+        name=et2.getText().toString();
+        dept=et3.getText().toString();
+        if(rno.equals("")||name.equals("")||dept.equals("")){
+            Toast.makeText(this,"Please enter values",Toast.LENGTH_LONG).show();
+        }else{
+            ContentValues values=new ContentValues();
+            values.put("rollno",rno);
+            values.put("name",name);
+            values.put("dept",dept);
+            db.update("student",values,"rollno="+rno,null);
+            Toast.makeText(this,"Updated successfully",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void onDelete(View view) {
+        rno=et1.getText().toString();
+        name=et2.getText().toString();
+        dept=et3.getText().toString();
+        if(rno.equals("")||name.equals("")||dept.equals("")){
+            Toast.makeText(this,"Please enter values",Toast.LENGTH_LONG).show();
+        }else {
+            db.delete("student","rollno="+rno,null);
+            Toast.makeText(this,"Deleted successfully",Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+    public void onView(View view) {
+        StringBuffer buffer = new StringBuffer();
+        Cursor c=db.rawQuery("select * from student",null);
+        while (c.moveToNext())
+        {
+            buffer.append("\n"+c.getString(0));
+            buffer.append("\n"+c.getString(1));
+            buffer.append("\n"+c.getString(2));
+        }
+        Toast.makeText(this,buffer.toString(),Toast.LENGTH_LONG).show();
+    }
+
+}
+
+
+DBHelper
+
+
+package com.example.sql;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.annotation.Nullable;
+
+public class DBHelper extends SQLiteOpenHelper{
+    public DBHelper(@Nullable Context context){
+        super(context,"student.db",null,1);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL("create table student(rollno int,name varchar(20),dept varchar(20))");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("drop table if exists student");
+        onCreate(sqLiteDatabase);
+    }
+}
